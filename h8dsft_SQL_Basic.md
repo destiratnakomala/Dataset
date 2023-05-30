@@ -1,36 +1,10 @@
-# Non Graded Challenge 1
+SELECT
 
-_Non-Graded Assignment ini dibuat guna mengevaluasi pembelajaran pada Hacktiv8 Data Science Fulltime Program khususnya pada konsep SQL._
+Substype.subscriber_type, Subscriber.name AS Subscriber, Subscriber.landmark,Substype.start_date, Substype.end_date
 
----
-## Assignment Instructions
-
-Akses data dari [BigQuery Sandbox](https://console.cloud.google.com/bigquery) dengan ketentuan: 
-- Project_id: `bigquery-public-data`
-- Dataset: `san_francisco`
-- Table: `bikeshare_trips` & `bikeshare_stations`
-
-Untuk mempermudah pengerjaan, berikut kolom-kolom yang bisa difokuskan dari masing-masing tabel:
-- Table `bikeshare_trips` : `trip_id`, `start_date`, `subscriber_type`, `start_station_name`, dan `start_station_id`
-- Table `bikeshare_stations` : `station_id`, `name`, dan `landmark` 
-
-Pada kasus ini, kamu diminta untuk membandingkan tingkat peminjaman sepeda dari `subcriber_type`: `Subscriber` di kota `Redwood City` untuk periode Q1 dan Q2 tahun 2016.
-
-Hints:
-- Lakukan join pada kedua tabel.
-- Terapkan kondisional pada `start_date`, `subcriber_type`, dan `landmark`.
-- Hitung banyak kemunculan entry data untuk masing-masing periode (1 Query untuk 1 periode).
-
----
-## Assignment Submission
-
-* Simpan assignment pada sesi ini dengan nama `h8dsft_SQL_Basic`.
-* Push Assigment yang telah dibuat ke akun Github pribadi masing-masing student.
-
----
-## Assignment Objectives
-
-Non-Graded Assignment ini dibuat guna mengevaluasi konsep SQL sebagai berikut:
-
-* Mampu membuat query untuk select data
-* Mampu membuat query dengan Join
+FROM `bigquery-public-data.san_francisco.bikeshare_trips` AS Substype /*data subscribe_type*/
+JOIN 
+`bigquery-public-data.san_francisco.bikeshare_stations` AS Subscriber /*data subscriber / name customer*/
+ON Subscriber.station_id = Substype.start_station_id /*primary key-nya station id dari kedua data tersebut*/
+WHERE landmark = 'Redwood City'/*filter hanya untuk landmark : redwood city*/
+AND EXTRACT(year FROM start_date)=2016;/*Filter hanya year yang diambil dari data tipe timestamp*/
