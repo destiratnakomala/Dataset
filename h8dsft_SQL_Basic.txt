@@ -8,3 +8,26 @@ JOIN
 ON Subscriber.station_id = Substype.start_station_id /*primary key-nya station id dari kedua data tersebut*/
 WHERE landmark = 'Redwood City'/*filter hanya untuk landmark : redwood city*/
 AND EXTRACT(year FROM start_date)=2016;/*Filter hanya year yang diambil dari data tipe timestamp*/
+
+SELECT
+Substype.subscriber_type, Subscriber.name AS Subscriber, Subscriber.landmark,Substype.start_date, Substype.end_date
+
+FROM `bigquery-public-data.san_francisco.bikeshare_trips` AS Substype /*data subscribe_type*/
+JOIN 
+`bigquery-public-data.san_francisco.bikeshare_stations` AS Subscriber /*data subscriber / name customer*/
+ON Subscriber.station_id = Substype.start_station_id /*primary key-nya station id dari kedua data tersebut*/
+WHERE landmark = 'Redwood City'/*filter hanya untuk landmark : redwood city*/
+AND EXTRACT(year FROM start_date)=2016;/*Filter hanya year yang diambil dari data tipe timestamp*/
+
+
+#REVISED DARI KAK HANA
+SELECT
+COUNT (trip_id) AS Jumlah_Data
+FROM 
+`bigquery-public-data.san_francisco.bikeshare_trips`
+JOIN
+`bigquery-public-data.san_francisco.bikeshare_stations`
+ON station_id= start_station_id
+WHERE subscriber_type = 'Subscriber'
+AND landmark = 'Redwood City'
+AND start_date BETWEEN '2016-01-01' AND '2016-12-31';
