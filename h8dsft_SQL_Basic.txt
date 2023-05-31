@@ -1,44 +1,77 @@
-SELECT
+#Target: Membandingkan tingkat peminjaman sepeda dari 'subscriber_type': 'Subscriber' di kota 'Redwood City' Untuk Periode Q1 dan Q2 tahun 2016
 
-Substype.subscriber_type, Subscriber.name AS Subscriber, Subscriber.landmark,Substype.start_date, Substype.end_date
+#Kolom yang difokuskan:
+#Tabel 'bikershare_trips': trip_id, start_date, subscriber_type, start_station_name, dan start_station_id
+#Tabel 'bikershare_stations' : station_id, name, landmark
 
-FROM `bigquery-public-data.san_francisco.bikeshare_trips` AS Substype /*data subscribe_type*/
-JOIN 
-`bigquery-public-data.san_francisco.bikeshare_stations` AS Subscriber /*data subscriber / name customer*/
-ON Subscriber.station_id = Substype.start_station_id /*primary key-nya station id dari kedua data tersebut*/
-WHERE landmark = 'Redwood City'/*filter hanya untuk landmark : redwood city*/
-AND EXTRACT(year FROM start_date)=2016;/*Filter hanya year yang diambil dari data tipe timestamp*/
-
-SELECT
-Substype.subscriber_type, Subscriber.name AS Subscriber, Subscriber.landmark,Substype.start_date, Substype.end_date
-
-FROM `bigquery-public-data.san_francisco.bikeshare_trips` AS Substype /*data subscribe_type*/
-JOIN 
-`bigquery-public-data.san_francisco.bikeshare_stations` AS Subscriber /*data subscriber / name customer*/
-ON Subscriber.station_id = Substype.start_station_id /*primary key-nya station id dari kedua data tersebut*/
-WHERE landmark = 'Redwood City'/*filter hanya untuk landmark : redwood city*/
-AND EXTRACT(year FROM start_date)=2016;/*Filter hanya year yang diambil dari data tipe timestamp*/
-
-
-#REVISED DARI KAK HANA
-SELECT
-COUNT (trip_id) AS Jumlah_Data
+#JOIN table bikershare_trips pada bikershare_stasions untuk periode Q1 (01 Januari 2016 -31 Maret 2016)
+SELECT 
+subscriber_type,
+trip_id ,
+start_date,  
+start_station_name, 
+start_station_id, 
+station_id, 
+name, 
+landmark
 FROM 
-`bigquery-public-data.san_francisco.bikeshare_trips`
+`bigquery-public-data.san_francisco.bikeshare_trips` 
 JOIN
-`bigquery-public-data.san_francisco.bikeshare_stations`
-ON station_id= start_station_id
+`bigquery-public-data.san_francisco.bikeshare_stations` 
+ON start_station_id= station_id
 WHERE subscriber_type = 'Subscriber'
 AND landmark = 'Redwood City'
-AND start_date BETWEEN '2016-01-01' AND '2016-12-31';
+AND start_date BETWEEN '2016-01-01' AND '2016-03-31';
 
-SELECT
-trip_id, start_date, subscriber_type, start_station_name, start_station_id
+#JOIN table bikershare_trips pada bikershare_stasions untuk periodeQ2 (01 April 2016 -03 Juni 2016)
+SELECT 
+subscriber_type,
+trip_id ,
+start_date,  
+start_station_name, 
+start_station_id, 
+station_id, 
+name, 
+landmark
 FROM 
-`bigquery-public-data.san_francisco.bikeshare_trips`
+`bigquery-public-data.san_francisco.bikeshare_trips` 
 JOIN
-`bigquery-public-data.san_francisco.bikeshare_stations`
-ON station_id= start_station_id
+`bigquery-public-data.san_francisco.bikeshare_stations` 
+ON start_station_id= station_id
 WHERE subscriber_type = 'Subscriber'
 AND landmark = 'Redwood City'
-AND start_date BETWEEN '2016-01-01' AND '2016-12-31';
+AND start_date BETWEEN '2016-04-01' AND '2016-06-03';
+
+#COUNT untuk JOIN Q1 (01 Januari 2016 -31 Maret 2016)
+SELECT 
+COUNT (trip_id) AS Jumlah_Peminjam_Q1
+FROM 
+`bigquery-public-data.san_francisco.bikeshare_trips` 
+JOIN
+`bigquery-public-data.san_francisco.bikeshare_stations` 
+ON start_station_id= station_id
+WHERE subscriber_type = 'Subscriber'
+AND landmark = 'Redwood City'
+AND start_date BETWEEN '2016-01-01' AND '2016-03-31';
+
+#COUNT pada JOIN Q2 (01 April 2016 -03 Juni 2016)
+SELECT 
+COUNT (trip_id) AS Jumlah_Peminjam_Q2
+FROM 
+`bigquery-public-data.san_francisco.bikeshare_trips` 
+JOIN
+`bigquery-public-data.san_francisco.bikeshare_stations` 
+ON start_station_id= station_id
+WHERE subscriber_type = 'Subscriber'
+AND landmark = 'Redwood City'
+AND start_date BETWEEN '2016-04-01' AND '2016-06-03';
+
+#Berdasarkan data yang telah diolah jumlah peminjaman sepeda dari 'subscriber_type': 'Subscriber' di kota 'Redwood City' 
+#untuk Periode Q1 dan Q2 tahun 2016 masing-masing adalah:
+#Jumlah_Peminjam_Q1 = 403
+#Jumlah_Peminjam_Q2 = 258
+
+#--------------------------------------------------------------------------------------------------
+#Sehingga, dapat disimpulkan bahwa pada periode Q1 (01 Januari 2016 - 31 Maret 2016) lebih banyak 
+#yang meminjam sepeda dibandingkan pada periode Q2 (01 April 2016 - 03 Juni 2016)
+#--------------------------------------------------------------------------------------------------
