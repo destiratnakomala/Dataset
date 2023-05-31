@@ -31,3 +31,14 @@ ON station_id= start_station_id
 WHERE subscriber_type = 'Subscriber'
 AND landmark = 'Redwood City'
 AND start_date BETWEEN '2016-01-01' AND '2016-12-31';
+
+SELECT
+trip_id, start_date, subscriber_type, start_station_name, start_station_id
+FROM 
+`bigquery-public-data.san_francisco.bikeshare_trips`
+JOIN
+`bigquery-public-data.san_francisco.bikeshare_stations`
+ON station_id= start_station_id
+WHERE subscriber_type = 'Subscriber'
+AND landmark = 'Redwood City'
+AND start_date BETWEEN '2016-01-01' AND '2016-12-31';
